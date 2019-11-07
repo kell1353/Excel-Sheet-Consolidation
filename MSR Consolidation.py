@@ -3,7 +3,7 @@ import pandas as pd
 import openpyxl
 import pyodbc
 
-path = 'C:/Users/Austin Keller/Desktop/MSR Consolidation'
+path = ''
 os.chdir(path)
 
 included_extensions = ['MSR.xlsm']
@@ -30,13 +30,3 @@ for i in range(1, 101):
 workbook.save('Master MSR List.xlsx')
 workbook.close()
 
-##conn = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};'
-##                      r'DBQ = C:/Users/Austin Keller/Desktop/MSR Consolidation/testdb.accdb;')
-##cursor = conn.cursor()
-####cursor.execute('select * from tracking_sales')
-##cursor.execute('''
-##                    INSERT INTO names_table (First_Name, Last_Name, Age)
-##                    VALUES('Mike', 'Jordan',55)
-##
-##                  ''')
-##conn.commit()
