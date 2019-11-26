@@ -8,7 +8,7 @@ import schedule
 import openpyxl
 import win32com.client
 
-path = 'C:/Users/Austin Keller/Desktop/MSR Consolidation/TEST'
+path = 'Set a file path'
 os.chdir(path)
 
 def consolidate():
