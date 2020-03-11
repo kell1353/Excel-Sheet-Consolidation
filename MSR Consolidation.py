@@ -8,7 +8,7 @@ import schedule
 import openpyxl
 import win32com.client
 
-path = 'Set a file path'
+path = 'insert file path here'
 os.chdir(path)
 
 def consolidate():
@@ -26,12 +26,13 @@ def consolidate():
     for i in range(0, subFolder.Items.Count):
         subFolderItemAttachments = message.Attachments
         nbrOfAttachmentInMessage = subFolderItemAttachments.Count
-        x = 1
-        while nbrOfAttachmentInMessage == x:
-            attachment = subFolderItemAttachments.item(x)
-            #Saves attachment to location
-            attachment.SaveAsFile(str(path) + '/'+ str(attachment))
-            break
+
+        if nbrOfAttachmentInMessage > 0:
+            for j in range(0, nbrOfAttachmentInMessage):
+                attachment = subFolderItemAttachments.item(j + 1)
+                if str(attachment)[-8:] == 'MSR.xlsm':
+                    #Saves attachment to location
+                    attachment.SaveAsFile(str(path) + '/'+ str(attachment))
         message = subFolderMessages.GetNext()
 
 
@@ -42,7 +43,7 @@ def consolidate():
                                  if any(fn.endswith(ext) for ext in included_extensions)]
 
     'Read them in and delete the first row for all frames except the first'
-    excelFiles = [pd.read_excel(name, 'MSR Template', skiprows = 6) for name in file_names]
+    excelFiles = [pd.read_excel(name, 'MSR Template', skiprows = 7) for name in file_names]
     excelFiles[1:] = [dfs[1:] for dfs in excelFiles[1:]]
 
     "Concat the MSR's and write the data to a new excel sheet"
@@ -54,10 +55,13 @@ def consolidate():
     'Retrieve the workbook and worksheet objects.'
     workbook  = openpyxl.load_workbook('Master MSR List.xlsx')
     worksheet = workbook.active
+
+    'Delete empty column "C"'
+    worksheet.delete_cols(3,1)
     
     'Set the bullets column format to bullet points.'
     for i in range(1, 101):
-        cell = worksheet.cell(row = i, column = 4)
+        cell = worksheet.cell(row = i+1, column = 6)
         cell.number_format = '•  @'
     workbook.save('Master MSR List.xlsx')
     workbook.close()
@@ -65,7 +69,7 @@ def consolidate():
     print('The consolidation is complete.')
     sys.exit()
     return
-    
+
 consolidate()
 
 #Automatically run the Python during a given time
